@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from tools import *
 
 class Equation(object):
 
 	def __init__(self):
-		self.get_equation()
-		self.construct_function()
+		get_equation(self)
+		self._construct_function()
 
 		# Attributes to initialize later
 
@@ -25,12 +26,42 @@ class Equation(object):
 		self.max_number_solutions = None
 
 
+	def __repr__(self):
+		equation_reconstruct = ''
+		for index, _ in enumerate(self.powers):
+			if index == 0 and self.signs[0] is '+':
+				pass
+			elif index == 0 and self.signs[0] is '-':
+				equation_reconstruct += str(self.signs[index])
+				equation_reconstruct += ""
+			else:
+				equation_reconstruct += str(self.signs[index])
+				equation_reconstruct += " "
+
+			if self.coefficients[index] == 1:
+				pass
+			else:
+				equation_reconstruct += str(self.coefficients[index])
+
+			if self.powers[index] == 1:
+				equation_reconstruct += "x"
+			elif self.powers[index] == 0:
+				equation_reconstruct += ""
+			else:
+				equation_reconstruct += "x^"
+				equation_reconstruct += str(self.powers[index])
+
+			equation_reconstruct += " "
+
+		return ("Equation: {}".format(equation_reconstruct))
+
+
 	def setup(self, a, b, interval=0.0001):
 		# Set bounds
 		self.a = a
 		self.b = b
 
-		# Calculate X
+		# Generate X based on domain input [a, b] with interval
 		self.X = np.arange(a, b, interval)
 
 		# Calculate Y
@@ -40,7 +71,7 @@ class Equation(object):
 		self.possible_real_solutions()
 
 		# Determine maximum number real solutions
-		self.calculate_max_number_solutions()
+		self._calculate_max_number_solutions()
 
 
 	def calculate_Y(self):
@@ -49,7 +80,7 @@ class Equation(object):
 			y_value = 0
 			for index, power in enumerate(self.powers):
 				sign = np.where(self.signs[index] == '+', 1, -1)
-				coefficient = sign * int(self.coefficients[index])
+				coefficient = sign * self.coefficients[index]
 				x_power = x ** power
 				term = coefficient * x_power
 				y_value += term
@@ -85,7 +116,7 @@ class Equation(object):
 		neg_signs = []
 		for index, power in enumerate(self.powers):
 			# Even powers: sign stays the same
-			if int(power) % 2 == 0:
+			if power % 2 == 0:
 				neg_signs.append(self.signs[index])
 			# Odd power: flip sign
 			else:
@@ -97,90 +128,16 @@ class Equation(object):
 		self.negative_solutions = self.sign_switch_count(neg_signs)
 
 
-	def calculate_max_number_solutions(self):
+	def _calculate_max_number_solutions(self):
 		self.max_number_solutions = max(self.powers)
 
 
-	def get_equation(self):
-		print("\n")
-		print("\tPlease enter a polynomial")
-		print("\tE.g., x^3 - 3x^2 + 3\n")
-		user_function = raw_input(">> ")
+	def _construct_function(self):
 
-		print("\nEquation: {}\n\n".format(user_function))
-
-		self.raw_equation = user_function.split(' ')
-
-
-
-	def capture_signs(self):
-		self.signs = []
-		for index, term in enumerate(self.raw_equation):
-			# Capture signs
-			if index == 0 and term[0] is not '-':
-				self.signs.append('+')
-
-			elif index == 0 and term[0] is '-':
-				self.signs.append('-')
-
-			elif index % 2 != 0:
-				self.signs.append(term)	
-
-
-
-	def capture_coefficients(self):
-		self.coefficients = []
-		for index, term in enumerate(self.raw_equation):
-
-			# Only looks at even-numbered terms. (odd numbered terms are signs)
-			if index % 2 == 0:
-
-				if 'x' in term:
-					x_index = term.index('x')
-					if '-' in term:
-						# Implicit 1
-						if len(term[1:x_index]) == 0:
-							self.coefficients.append(1)
-						else:
-							self.coefficients.append(term[1:x_index])
-					else:
-						# Implicit 1
-						if len(term[:x_index]) == 0:
-							self.coefficients.append(1)
-						else:
-							self.coefficients.append(term[:x_index])
-				
-				# Constant
-				elif 'x' not in term:
-					if '-' in term:
-						self.coefficients.append(term[1:])
-					else:
-						self.coefficients.append(int(term))	
-
-
-	def capture_powers(self):
-		self.powers = []
-		for index, term in enumerate(self.raw_equation):
-			if index % 2 == 0:
-				if 'x^' in term:
-					index = term.index('^') + 1
-					self.powers.append(int(term[index:]))
-				elif 'x' in term:
-					self.powers.append(1)
-				elif 'x' not in term:
-					self.powers.append(0)
-
-
-	def construct_function(self):
-
-		# Capture signs of terms
-		self.capture_signs()
-		
-		# Capture powers of terms
-		self.capture_powers()
-
-		# Capture coefficients
-		self.capture_coefficients()
+		# Capture signs, powers, and coefficients of terms
+		capture_signs(self)
+		capture_powers(self)
+		capture_coefficients(self)
 
 		#print_reconstructed_equation(signs, coefficients, powers)
 
@@ -188,33 +145,6 @@ class Equation(object):
 		for index, power in enumerate(self.powers):
 			value = [self.signs[index], self.coefficients[index]]
 			self.equation[power] = value
-
-
-	def __repr__(self):
-		equation_reconstruct = ''
-		for index, _ in enumerate(self.powers):
-			if index == 0 and self.signs[0] is '+':
-				pass
-			else:
-				equation_reconstruct += str(self.signs[index])
-				equation_reconstruct += " "
-
-			if self.coefficients[index] == 1:
-				pass
-			else:
-				equation_reconstruct += str(self.coefficients[index])
-
-			if self.powers[index] == 1:
-				equation_reconstruct += "x"
-			elif self.powers[index] == 0:
-				equation_reconstruct += ""
-			else:
-				equation_reconstruct += "x^"
-				equation_reconstruct += str(self.powers[index])
-
-			equation_reconstruct += " "
-
-		return ("Equation: {}".format(equation_reconstruct))
 
 
 	def plot(self, roots = None):

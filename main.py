@@ -7,7 +7,7 @@ def main():
 	user_continue = True
 
 	while user_continue:
-		print("Welcome.")
+
 		eq = Equation()
 		eq.setup(-8, 8)
 		bisection = Bisection(eq)
