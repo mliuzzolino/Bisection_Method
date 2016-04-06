@@ -18,6 +18,12 @@ For example, the following is acceptable:
 However, the following will result in error:
 
     >> 3x^3 -x^2 - 5x+ 50
+    
+## Library Dependencies
+This script utilizes the following libraries: 
+
+    numpy 
+    matplotlib.pyplot
 
 ## Issues
 ### Input
