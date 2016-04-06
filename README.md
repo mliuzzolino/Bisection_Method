@@ -5,6 +5,7 @@ This script uses the bisection method to find the roots of polynomials. Descarte
 
 ## Run
 From the parent folder, run:
+
     >>> python main.py
 
 ## Input Format
