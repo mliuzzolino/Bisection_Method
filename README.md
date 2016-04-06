@@ -9,11 +9,11 @@ From the parent folder, run:
     >>> python main.py
 
 ## Input Format
-Currently only accepts polynomials with integer coefficients. Powers must be represented with the carot, ^, and a space must be placed between each term and "+" or "-".
+Polynomial coefficients may take on any real value. Powers must be represented with the carot, ^, and a space must be placed between each term and "+" or "-". Do not use '*' to represent multiplication; e.g., 3 * x is incorrect. Rather, just input 3x.
 
 For example, the following is acceptable:
 
-    >> 3x^3 - x^2 - 5x + 50
+    >> 3x^3 - 0.5x^2 - 5x + 50.0
   
 However, the following will result in error:
 
@@ -21,7 +21,7 @@ However, the following will result in error:
 
 ## Issues
 ### Input
-The input format needs to be made more flexible such that spaces aren't an issue. Importantly, the coefficients need to be expanded beyond integers, and the function input should be expanded to include functions other than polynomials.
+The input format needs to be made more flexible such that spaces aren't an issue. The function input should be expanded to include functions other than polynomials.
 
 ### Root Finding
 Tolerances and max_iterations need to be checked for appropriateness. The algorithm for checking the positive and negative possible real root domains needs to be adjusted. For instance, I believe that if two real roots exist within the positive domain, the same one will be found twice. Thus, the algorithm needs to be altered such that once it finds the first root, it changes the initial lower and upper boundaries of the search domain such that it will be able to find the unique root.
