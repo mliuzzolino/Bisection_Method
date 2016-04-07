@@ -153,8 +153,8 @@ class Equation(object):
 		if roots:
 			plt.plot(self.X, np.zeros(len(self.Y)), 'r--')
 
-			for root_x, root_y in roots:
-				print("Root at {}".format(root_x))
+			for root_x, root_y in roots.values():
+				print("Root at {:.2f}".format(root_x))
 				plt.plot(root_x, root_y, 'ro')
 				plt.plot(np.ones(len(self.X)) * root_x, self.Y, 'b--')
 			

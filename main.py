@@ -10,6 +10,7 @@ def main():
 
 		eq = Equation()
 		eq.setup(-8, 8)
+		
 		bisection = Bisection(eq)
 		bisection.run()
 
